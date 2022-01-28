@@ -29,7 +29,23 @@ public class Window {
         }
 
         GLFWVidMode videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
+
         GLFW.glfwSetWindowPos(window, (videoMode.width() - width)/2, (videoMode.height() - height)/2);
+        GLFW.glfwMakeContextCurrent(window);
+
         GLFW.glfwShowWindow(window);
+        GLFW.glfwSwapInterval(1);
+    }
+
+    public void update(){
+        GLFW.glfwPollEvents();
+    }
+
+    public void swapBuffers(){
+        GLFW.glfwSwapBuffers(window);
+    }
+
+    public boolean shouldClose(){
+        return GLFW.glfwWindowShouldClose(window);
     }
 }
