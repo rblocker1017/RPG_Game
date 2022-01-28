@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Jars">
+    <CLASSES>
+      <root url="file://$USER_HOME$/Desktop/Programming/RPG Project/Jars" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$USER_HOME$/Desktop/Programming/RPG Project/Jars" />
+    </SOURCES>
+    <jarDirectory url="file://$USER_HOME$/Desktop/Programming/RPG Project/Jars" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Desktop/Programming/RPG Project/Jars" recursive="false" type="SOURCES" />
+  </library>
+</component>
