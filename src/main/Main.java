@@ -32,10 +32,6 @@ public class Main implements Runnable{
         if(Input.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT)){
 
         }
-        if(Input.isKeyDown(GLFW.GLFW_KEY_F11)) {
-            window.setFullScreen(!window.isFullScreen());
-        }
-
     }
     private void render(){
         window.swapBuffers();

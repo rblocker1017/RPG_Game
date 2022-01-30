@@ -1,27 +1,18 @@
 package engine.io;
 
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWCursorPosCallback;
-import org.lwjgl.glfw.GLFWKeyCallback;
-import org.lwjgl.glfw.GLFWMouseButtonCallback;
+import org.lwjgl.glfw.*;
 
 public class Input {
     private static boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];
     private static boolean[] buttons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
     private static double mouseX, mouseY;
+    private static double scrollX, scrollY;
 
-    private GLFWKeyCallback keyboard;
     private GLFWCursorPosCallback mouseMove;
     private GLFWMouseButtonCallback mouseButtons;
+    private GLFWScrollCallback mouseScroll;
 
     public Input(){
-        keyboard = new GLFWKeyCallback() {
-            @Override
-            public void invoke(long window, int key, int scancode, int action, int mods) {
-                keys[key] = (action != GLFW.GLFW_RELEASE); // Check if key is pressed or not
-            }
-
-        };
         mouseMove = new GLFWCursorPosCallback() {
             @Override
             public void invoke(long window, double xpos, double ypos) {
@@ -35,6 +26,15 @@ public class Input {
                 buttons[button] = (action != GLFW.GLFW_RELEASE); // Check if key is pressed or not
             }
         };
+
+        mouseScroll = new GLFWScrollCallback(){
+
+            @Override
+            public void invoke(long window, double xoffset, double yoffset) {
+                scrollX += xoffset;
+                scrollY += yoffset;
+            }
+        };
     }
     public static boolean isKeyDown(int key){
         return keys[key];
@@ -45,9 +45,9 @@ public class Input {
     }
 
     public void destroy(){
-        keyboard.free();
         mouseMove.free();
         mouseButtons.free();
+        mouseScroll.free();
     }
     public static double getMouseX() {
         return mouseX;
@@ -65,14 +65,6 @@ public class Input {
         this.mouseY = mouseY;
     }
 
-    public GLFWKeyCallback getKeyboard() {
-        return keyboard;
-    }
-
-    public void setKeyboard(GLFWKeyCallback keyboard) {
-        this.keyboard = keyboard;
-    }
-
     public GLFWCursorPosCallback getMouseMove() {
         return mouseMove;
     }
@@ -88,4 +80,32 @@ public class Input {
     public void setMouseButtons(GLFWMouseButtonCallback mouseButtons) {
         this.mouseButtons = mouseButtons;
     }
+
+    public GLFWScrollCallback getMouseScroll() {
+        return mouseScroll;
+    }
+
+    public static double getScrollX() {
+        return scrollX;
+    }
+
+    public static void setScrollX(double scrollX) {
+        Input.scrollX = scrollX;
+    }
+
+    public static double getScrollY() {
+        return scrollY;
+    }
+
+    public static void setScrollY(double scrollY) {
+        Input.scrollY = scrollY;
+    }
+
+    public void setMouseScroll(GLFWScrollCallback mouseScroll) {
+        this.mouseScroll = mouseScroll;
+    }
+    public void setButtons(int key, boolean action){
+        keys[key] = action;
+    }
+
 }

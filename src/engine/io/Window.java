@@ -1,10 +1,14 @@
 package engine.io;
 
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_F11;
+import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 
 public class Window {
     private int width, height;
@@ -15,19 +19,16 @@ public class Window {
     public Input input;
     private float backgroundR, backgroundG, backgroundB;
     private GLFWWindowSizeCallback sizeCallback;
+    private GLFWKeyCallback keyboard;
     private boolean isResized;
     private boolean isFullScreen;
     private int[] windowPosX = new int[1], windowPosY = new int[1];
-    private int minimizedWidth, minimizedHeight;
 
 
     public Window(int width, int height, String title){
         this.width = width;
         this.height = height;
         this.title = title;
-
-        minimizedWidth = width;
-        minimizedHeight = height;
     }
 
     public void create(){
@@ -71,10 +72,22 @@ public class Window {
             }
         };
 
-        GLFW.glfwSetKeyCallback(window, input.getKeyboard());
+        keyboard = new GLFWKeyCallback(){
+
+            @Override
+            public void invoke(long window, int key, int scancode, int action, int mods) {
+                if(key == GLFW.GLFW_KEY_F11 && action == GLFW.GLFW_PRESS){
+                    setFullScreen(!isFullScreen());
+                }
+                input.setButtons(key, (action != GLFW.GLFW_RELEASE));
+            }
+        };
+
+        GLFW.glfwSetKeyCallback(window, keyboard);
         GLFW.glfwSetCursorPosCallback(window, input.getMouseMove());
         GLFW.glfwSetMouseButtonCallback(window, input.getMouseButtons());
         GLFW.glfwSetWindowSizeCallback(window,sizeCallback);
+        GLFW.glfwSetScrollCallback(window, input.getMouseScroll());
 
     }
     public void update(){
@@ -155,7 +168,7 @@ public class Window {
         isFullScreen = fullScreen;
         isResized = true;
 
-        if(isFullScreen){
+        if (isFullScreen) {
             GLFW.glfwGetWindowPos(window, windowPosX, windowPosY);
 
             int tempWidth = width;
@@ -166,9 +179,9 @@ public class Window {
 
             width = tempWidth;
             height = tempHeight;
-        }
-        else{
+        } else {
             GLFW.glfwSetWindowMonitor(window, 0, windowPosX[0], windowPosY[0], width, height, 0);
         }
+
     }
 }
